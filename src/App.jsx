@@ -3,6 +3,7 @@ import './App.css';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import Search from './pages/Search';
+import CryptoPage from './pages/CryptoPage';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           {/* <Route path='crypto/:cryptoTicker' element={<CryptoPage />} /> */}
 
           <Route path='/search/:field' element={<Search />} />
+          <Route path='crypto/:cryptoTicker' element={<CryptoPage />} />
         </Routes>
       </div>
     </div>

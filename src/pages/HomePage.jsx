@@ -1,17 +1,15 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from '@chakra-ui/react';
 import {
   Flex,
   Card,
-  CardHeader,
   CardBody,
   CardFooter,
   Stack,
   Heading,
-  Button,
   Image,
-  Text,
 } from '@chakra-ui/react';
 import { Stat, StatNumber, StatHelpText, StatArrow } from '@chakra-ui/react';
 const apiKey = `${import.meta.env.VITE_API_KEY}`;
@@ -62,7 +60,12 @@ function HomePage() {
   return (
     <>
       {crypto && (
-        <Flex flexDirection='column' width='80vw'>
+        <Flex
+          flexDirection='column'
+          margin='10%'
+          justifyContent='center'
+          alignItems='center'
+        >
           {crypto.map(cryptoPair => {
             return (
               <Card
@@ -71,7 +74,9 @@ function HomePage() {
                 variant='outline'
                 overflow='hidden'
                 marginBottom='5%'
-                MinHeight='min-content'
+                width='50%'
+                minW='max-content'
+                minHeight='min-content'
               >
                 <Image
                   objectFit='cover'
@@ -79,10 +84,9 @@ function HomePage() {
                   height='200px'
                   src={`${cryptoPair[0].symbol}.png`}
                   alt={`${cryptoPair[0].name}`}
-                  margin='5%'
                 />
 
-                <Stack border='1px solid black'>
+                <Stack border='1px solid black' width='100%'>
                   <CardBody textAlign='left'>
                     <Flex flexDirection='column' height='100%'>
                       <Heading size='md' color='yellow.500'>
@@ -123,11 +127,14 @@ function HomePage() {
                   </CardBody>
 
                   <CardFooter>
-                    <Button
-                      variant='solid'
+                    <Link
+                      href={`/crypto/${cryptoPair[0].symbol}`}
+                      padding='4px'
                       backgroundColor='rgba(15, 22, 97, 0.9)'
                       border='1px solid rgba(15, 22, 97, 0.9)'
+                      borderRadius='5px'
                       color='white'
+                      fontSize='md'
                       _hover={{
                         color: 'yellow.500',
                         backgroundColor: 'white',
@@ -136,8 +143,8 @@ function HomePage() {
                         borderStyle: 'solid',
                       }}
                     >
-                      See Historical Prices
-                    </Button>
+                      See More
+                    </Link>
                   </CardFooter>
                 </Stack>
               </Card>
