@@ -63,7 +63,7 @@ function Navbar() {
             src={'/logo.png'}
             fallbackSrc=''
             alt='Home'
-            width='2rem'
+            width='7rem'
             height='auto'
             marginRight='2rem'
             borderRadius='md'

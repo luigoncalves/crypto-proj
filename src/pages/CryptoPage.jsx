@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext, useRef } from 'react';
 import { useParams } from 'react-router-dom';
+import { CustomTooltip } from '../components/CustomTooltip';
 import axios from 'axios';
 import { Link as ChakraLink } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';
@@ -7,7 +8,7 @@ import {
   Flex,
   Text,
   Box,
-  Card,
+  Button,
   Stack,
   CardBody,
   Heading,
@@ -145,15 +146,6 @@ function CryptoPage() {
     getHistoricalData(cryptoTicker);
   }, []);
 
-  // ------------------------------- everytime the button is clicked this runs
-
-  //   useEffect(() => {
-  //     if (user) {
-  //       checkWatchList();
-  //       // console.log(addButton);
-  //     }
-  //   }, [addButton]);
-
   // ------------------------ for the graph size
 
   useEffect(() => {
@@ -188,6 +180,31 @@ function CryptoPage() {
     }
   }, [historicalPrices]);
 
+  // ------------------------------------ check if the item is already in the Watchlist    -------  when backend is done
+
+  //  const checkWatchList = async () => {
+  //   try {
+  //     const response = await getAllUserItems(user);
+  //     // console.log('this is the watchList:', response.data);
+  //     const check = await response.data.some(
+  //       item => item.tickerSymbol === cryptoTicker
+  //     );
+  //     setAddButton(!check);
+  //     // console.log('check', check);
+  //     // console.log('inside checkwatchlist', addButton);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // ------------------------------- everytime the button is clicked this runs   -------  when backend is done
+
+  // useEffect(() => {
+  //   if (user) {
+  //     checkWatchList();
+  //   }
+  // }, [addButton]);
+
   return (
     <>
       <Flex
@@ -196,9 +213,49 @@ function CryptoPage() {
         height='200px'
         flexDirection='column'
       >
-        <Flex flexDirection='column' marginLeft='2%' marginTop='2%'>
+        <Flex flexDirection='column' marginLeft='2rem' marginTop='2%'>
           <Heading color='yellow.500'>{cryptoInfo.name}</Heading>
           <Text color='white'>{cryptoInfo.symbol}</Text>
+
+          {/*----------------------------------   Button to add crypto to the watchlist, it has to be connected to backend  ------------*/}
+
+          {/* {isLoggedIn && addButton && (
+            <Button
+              display='flex'
+              borderRadius='md'
+              border='1px solid rgba(220, 14, 117, 0.9)'
+              w='8rem'
+              h='2rem'
+              alignItems='center'
+              justifyContent='center'
+              marginTop='0.5rem'
+              marginLeft='1rem'
+              fontSize='sm'
+              color='rgba(220, 14, 117, 0.9)'
+              _hover={{ bg: 'rgba(220, 14, 117, 0.9)', color: 'gray.100' }}
+              variant='outline'
+              onClick={addToWatchList}
+            >
+              Add to Watchlist
+            </Button>
+          )}
+          {isLoggedIn && !addButton && (
+            <Box
+              display='flex'
+              borderRadius='md'
+              border='1px solid gray'
+              w='8rem'
+              h='2rem'
+              alignItems='center'
+              justifyContent='center'
+              marginTop='0.5rem'
+              marginLeft='1rem'
+              fontSize='sm'
+              color='gray'
+            >
+              Add to Watchlist
+            </Box>
+          )} */}
         </Flex>
         <Flex
           margin='2%'
@@ -220,7 +277,7 @@ function CryptoPage() {
                 {cryptoQuote.changesPercentage > 0 ? (
                   <Flex alignItems='center' marginLeft='5%'>
                     <StatArrow type='increase' />
-                    <Text color='green' fontSize='sm' fontWeight='600'>
+                    <Text color='green.300' fontSize='sm' fontWeight='600'>
                       {(
                         Math.round(cryptoQuote.changesPercentage * 100) / 100
                       ).toFixed(3)}
@@ -230,7 +287,7 @@ function CryptoPage() {
                 ) : (
                   <Flex alignItems='center' marginLeft='5%'>
                     <StatArrow type='decrease' />
-                    <Text color='red' fontSize='sm' fontWeight='600'>
+                    <Text color='red.300' fontSize='sm' fontWeight='600'>
                       {(Math.round(cryptoQuote.changesPercentage * 100) / 100)
                         .toFixed(3)
                         .slice(1)}
@@ -251,6 +308,138 @@ function CryptoPage() {
             Volume Avg:{' '}
             {cryptoQuote.avgVolume ? formatNumber(cryptoQuote.avgVolume) : '-'}
           </Text>
+        </Flex>
+      </Flex>
+
+      {/* ----------------------------------------- Graph - Historical Prices ---------------------------- */}
+      <Flex ref={gridItemRef} minH='100vh' flexDirection='column'>
+        <Box
+          display='flex'
+          width='100%'
+          justifyContent='space-between'
+          alignItems='center'
+          marginTop='1.5rem'
+          marginBottom='2rem'
+        >
+          <Heading
+            as='h3'
+            size='md'
+            color='rgba(15, 22, 97, 0.9)'
+            paddingLeft='1rem'
+          >
+            Historical Prices
+          </Heading>
+
+          {/* -------------------------------------- Buttons to choose the graph time interval -------------- */}
+          <Flex
+            margin='1rem'
+            justifyContent='space-evenly'
+            width='min-content'
+            alignItems='center'
+            overflowX='scroll'
+          >
+            <Button
+              color={graphDate === '5D' ? 'gray.100' : 'rgba(15, 22, 97, 0.9)'}
+              size='sm'
+              variant='ghost'
+              onClick={() => setGraphDate('5D')}
+              bg={graphDate === '5D' ? 'rgba(15, 22, 97, 0.9)' : 'transparent'}
+              _hover={{
+                bg: graphDate === '5D' ? null : 'rgba(15, 22, 97, 0.3)',
+              }}
+            >
+              5D
+            </Button>
+            <Button
+              color={graphDate === '1M' ? 'gray.100' : 'rgba(15, 22, 97, 0.9)'}
+              size='sm'
+              variant='ghost'
+              onClick={() => setGraphDate('1M')}
+              bg={graphDate === '1M' ? 'rgba(15, 22, 97, 0.9)' : 'transparent'}
+              _hover={{
+                bg: graphDate === '1M' ? null : 'rgba(15, 22, 97, 0.3)',
+              }}
+            >
+              1M
+            </Button>
+            <Button
+              color={graphDate === '3M' ? 'gray.100' : 'rgba(15, 22, 97, 0.9)'}
+              size='sm'
+              variant='ghost'
+              onClick={() => setGraphDate('3M')}
+              bg={graphDate === '3M' ? 'rgba(15, 22, 97, 0.9)' : 'transparent'}
+              _hover={{
+                bg: graphDate === '3M' ? null : 'rgba(15, 22, 97, 0.3)',
+              }}
+            >
+              3M
+            </Button>
+            <Button
+              color={graphDate === '6M' ? 'gray.100' : 'rgba(15, 22, 97, 0.9)'}
+              size='sm'
+              variant='ghost'
+              onClick={() => setGraphDate('6M')}
+              bg={graphDate === '6M' ? 'rgba(15, 22, 97, 0.9)' : 'transparent'}
+              _hover={{
+                bg: graphDate === '6M' ? null : 'rgba(15, 22, 97, 0.3)',
+              }}
+            >
+              6M
+            </Button>
+            <Button
+              color={graphDate === '1Y' ? 'gray.100' : 'rgba(15, 22, 97, 0.9)'}
+              size='sm'
+              variant='ghost'
+              onClick={() => setGraphDate('1Y')}
+              bg={graphDate === '1Y' ? 'rgba(15, 22, 97, 0.9)' : 'transparent'}
+              _hover={{
+                bg: graphDate === '1Y' ? null : 'rgba(15, 22, 97, 0.3)',
+              }}
+            >
+              1Y
+            </Button>
+            <Button
+              color={graphDate === '5Y' ? 'gray.100' : 'rgba(15, 22, 97, 0.9)'}
+              size='sm'
+              variant='ghost'
+              onClick={() => setGraphDate('5Y')}
+              bg={graphDate === '5Y' ? 'rgba(15, 22, 97, 0.9)' : 'transparent'}
+              _hover={{
+                bg: graphDate === '5Y' ? null : 'rgba(15, 22, 97, 0.3)',
+              }}
+            >
+              5Y
+            </Button>
+          </Flex>
+        </Box>
+        <Flex justifyContent='center' alignItems='center'>
+          {historicalPrices.length > 0 && changes.length > 0 ? (
+            <LineChart
+              width={gridItemWidth * 0.9}
+              height={gridItemHeight * 0.85}
+              data={auxPrices}
+            >
+              <Line
+                type='monotone'
+                dataKey='close'
+                stroke={changes[0][graphDate] > 0 ? '#38A169' : '#E53E3E'}
+                dot={false}
+              />
+              <CartesianGrid stroke='#ccc' />
+              <XAxis dataKey='label' fontSize='10' />
+              <YAxis fontSize='10' />
+              <Tooltip content={<CustomTooltip />} />
+            </LineChart>
+          ) : (
+            <Flex
+              width={gridItemWidth * 0.9}
+              height={gridItemHeight * 0.85}
+              justifyContent='center'
+              alignItems='center'
+            >
+              No Available Data
+            </Flex>
+          )}
         </Flex>
       </Flex>
     </>

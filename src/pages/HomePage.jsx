@@ -77,6 +77,7 @@ function HomePage() {
                 width='50%'
                 minW='max-content'
                 minHeight='min-content'
+                padding='1rem'
               >
                 <Image
                   objectFit='cover'
@@ -86,7 +87,7 @@ function HomePage() {
                   alt={`${cryptoPair[0].name}`}
                 />
 
-                <Stack border='1px solid black' width='100%'>
+                <Stack width='100%'>
                   <CardBody textAlign='left'>
                     <Flex flexDirection='column' height='100%'>
                       <Heading size='md' color='yellow.500'>

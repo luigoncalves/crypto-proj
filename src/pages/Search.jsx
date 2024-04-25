@@ -102,9 +102,8 @@ function Search() {
   return (
     <Flex
       flexDirection='column'
-      justifyContent='start'
-      alignContent='center'
-      width='80vw'
+      justifyContent='center'
+      width='100vw'
       height='auto'
       padding='20px'
     >
@@ -112,18 +111,24 @@ function Search() {
         Found {resultsLength} results for '{field}'
       </Heading>
 
-      <Flex flexDirection='column'>
+      <Flex flexDirection='column' margin='2.5rem'>
         {resultsLength === 0
           ? null
           : itemsToShow.map((item, index) => {
               return (
                 <ChakraLink
                   as={ReactRouterLink}
-                  to='/'
+                  to={`/crypto/${item.symbol}`}
                   key={index}
                   marginBottom='4px'
+                  _hover={{}}
                 >
-                  <Card marginBottom='2px'>
+                  <Card
+                    marginBottom='4px'
+                    _hover={{
+                      boxShadow: '0px 0px 3px 0px rgba(0, 0, 0, 0.5)',
+                    }}
+                  >
                     <CardBody>
                       <Flex justifyContent='space-between'>
                         <Heading size='sm' color='yellow.500' textAlign='left'>
